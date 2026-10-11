@@ -103,69 +103,66 @@
     </div>
   </div>
 
-  <script type="module">
-    import { DrawingManager } from './drawing.js';
-    import { LayerManager } from './layers.js';
-    import { StorageManager } from './storage.js';
+<script type="module">
+  import { DrawingManager } from './drawing.js';
+  import { LayerManager } from './layers.js';
+  import { StorageManager } from './storage.js';
 
-    let drawer1, drawer2, layerManager, storageManager;
+  let drawer1, drawer2, layerManager, storageManager;
 
-    window.addEventListener('DOMContentLoaded', () => {
-      drawer1 = new DrawingManager('canvas1');
-      drawer2 = new DrawingManager('canvas2');
-      layerManager = new LayerManager('layer-container');
-      storageManager = new StorageManager();
-    });
+  window.addEventListener('DOMContentLoaded', () => {
+    drawer1 = new DrawingManager('canvas1');
+    drawer2 = new DrawingManager('canvas2');
+    layerManager = new LayerManager('layer-container');
+    storageManager = new StorageManager();
+  });
 
-    window.showScreen = function(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
-    };
+  // windowオブジェクトに登録してグローバルから呼び出せるようにする
+  window.showScreen = function(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+  };
 
-    window.login = function(userType) {
-      const name = document.getElementById(userType === 'user1' ? 'u1-name' : 'u2-name').value;
-      const pass = document.getElementById(userType === 'user1' ? 'u1-pass' : 'u2-pass').value;
+  window.login = function(userType) {
+    const name = document.getElementById(userType === 'user1' ? 'u1-name' : 'u2-name').value;
+    const pass = document.getElementById(userType === 'user1' ? 'u1-pass' : 'u2-pass').value;
 
-      // 管理者ログイン判定
-      if (name === 'master' && pass === '0813') {
-        showScreen('admin-screen');
-        loadUserList();
-        return;
-      }
+    if (name === 'master' && pass === '0813') {
+      showScreen('admin-screen');
+      loadUserList();
+      return;
+    }
 
-      // 通常入室
-      showScreen('main-screen');
-    };
+    showScreen('main-screen');
+  };
 
-    window.openInviteModal = function() {
-      const url = "https://hinatabokko-jp.github.io/hinatabokko-app2/page31.html";
-      document.getElementById('invite-url-text').innerText = url;
-      document.getElementById('qr-code-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
-      document.getElementById('invite-modal').style.display = 'flex';
-    };
+  window.openInviteModal = function() {
+    const url = "https://hinatabokko-jp.github.io/hinatabokko-app2/page31.html";
+    document.getElementById('invite-url-text').innerText = url;
+    document.getElementById('qr-code-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
+    document.getElementById('invite-modal').style.display = 'flex';
+  };
 
-    window.closeInviteModal = function() {
-      document.getElementById('invite-modal').style.display = 'none';
-    };
+  window.closeInviteModal = function() {
+    document.getElementById('invite-modal').style.display = 'none';
+  };
 
-    window.triggerReflect = function() {
-      alert('「描き終わった」ボタンが押されました。お互いの画面に反映します！');
-    };
+  window.triggerReflect = function() {
+    alert('「描き終わった」ボタンが押されました。お互いの画面に反映します！');
+  };
 
-    window.saveArtwork = function() {
-      const dataUrl = document.getElementById('canvas1').toDataURL();
-      storageManager.saveArtwork(dataUrl, 'みんなの絵');
-      alert('作品を保存しました！');
-    };
+  window.saveArtwork = function() {
+    const dataUrl = document.getElementById('canvas1').toDataURL();
+    storageManager.saveArtwork(dataUrl, 'みんなの絵');
+    alert('作品を保存しました！');
+  };
 
-    window.openHistory = function() {
-      storageManager.renderHistoryModal('main-screen', () => {
-        // 閉じる時の処理
-      });
-    };
+  window.openHistory = function() {
+    storageManager.renderHistoryModal('main-screen', () => {});
+  };
 
-    window.undo = function() { drawer1.undo(); }
-    window.redo = function() { drawer1.redo(); }
-  </script>
+  window.undo = function() { drawer1.undo(); }
+  window.redo = function() { drawer1.redo(); }
+</script>
 </body>
 </html>
